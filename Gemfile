@@ -58,3 +58,5 @@ group :test do
   gem "selenium-webdriver"
   gem "sqlite3", ">= 1.4"
 end
+
+gem "devise", "~> 4.9"
