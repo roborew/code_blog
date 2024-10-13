@@ -2,6 +2,8 @@ require "test_helper"
 
 class ArticlesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @user = users(:morty)
+    sign_in @user
     @article = articles(:one)
   end
 
@@ -10,17 +12,23 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
+  test "should get new if signed in" do
     get new_article_url
     assert_response :success
   end
 
+  test "should not get new if not signed in" do
+    sign_out users(:morty)
+    get new_article_url
+    assert_response :redirect
+  end
+
   test "should create article" do
     assert_difference("Article.count") do
-      post articles_url, params: { article: { content: @article.content, publication_date: @article.publication_date, title: @article.title } }
+      post articles_url, params: { article: { content: @article.content, title: @article.title, publicate_date: @article.publication_date }  }
     end
-
     assert_redirected_to article_url(Article.last)
+    assert_equal @user, Article.last.user
   end
 
   test "should show article" do
