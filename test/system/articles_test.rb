@@ -1,11 +1,16 @@
 require "application_system_test_case"
 
 class ArticlesTest < ApplicationSystemTestCase
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    @user = users(:morty)
+    sign_in @user
     @article = articles(:one)
   end
 
   test "visiting the index" do
+    sign_out @user
     visit articles_url
     assert_selector "h1", text: "Articles"
   end

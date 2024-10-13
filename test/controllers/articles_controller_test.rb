@@ -36,9 +36,15 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get edit" do
+  test "should get edit if signed in" do
     get edit_article_url(@article)
     assert_response :success
+  end
+
+  test "should not get edit if not signed in" do
+    sign_out @user
+    get edit_article_url(@article)
+    assert_response :redirect
   end
 
   test "should update article" do
