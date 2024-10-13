@@ -8,6 +8,14 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
 
+# Enable ERB Lint
+Rails/RenderInline:
+  Enabled: true
+
+# Configure ERB Lint
+Rails/ErbSafety:
+  Enabled: true
+
 # Enable Rails cops
 Rails:
   Enabled: true
