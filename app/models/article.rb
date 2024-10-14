@@ -1,4 +1,5 @@
 class Article < ApplicationRecord
   belongs_to :user
-  validates :user, presence: true
+  has_many :taggings, dependent: :destroy
+  has_many :tags, through: :taggings
 end
