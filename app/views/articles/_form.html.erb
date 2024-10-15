@@ -15,6 +15,16 @@
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
   </div>
+<div>
+    <h1 class="font-bold text-4xl text-blue-500">Public#index</h1>
+    <p>Find me in app/views/public/index.html.erb</p>
+  <p data-controller="hello" data-action="click->hello#handleClick"></p>
+  </div>
+
+  <div class="field" data-controller="tags">
+       <%= form.label :tags, "Tags" %>
+       <input name="tags" id="tags-input"  data-tags-target="tagsInput" data-action="keyup->tags#handleKeyUp">
+  </div>
 
   <div>
     <%= form.label :content, style: "display: block" %>
