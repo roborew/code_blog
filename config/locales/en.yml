@@ -29,3 +29,10 @@
 
 en:
   hello: "Hello world"
+  articles:
+    create:
+      success: "Article was successfully created."
+    update:
+      success: "Article was successfully updated."
+    destroy:
+      success: "Article was successfully destroyed."

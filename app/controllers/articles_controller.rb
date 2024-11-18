@@ -18,16 +18,16 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
+    @existing_tags = @article.tags.pluck(:name)
   end
 
   # POST /articles or /articles.json
   def create
     @article = current_user.articles.build(article_params)
-
     respond_to do |format|
       if @article.save
         update_tags(@article)
-        format.html { redirect_to @article, notice: "Article was successfully created." }
+        format.html { redirect_to @article, notice: t(".success") }
         format.json { render :show, status: :created, location: @article }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -41,7 +41,7 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       if @article.update(article_params)
         update_tags(@article)
-        format.html { redirect_to @article, notice: "Article was successfully updated." }
+        format.html { redirect_to @article, notice: t(".success") }
         format.json { render :show, status: :ok, location: @article }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -54,7 +54,7 @@ class ArticlesController < ApplicationController
   def destroy
     @article.destroy!
     respond_to do |format|
-      format.html { redirect_to articles_path, status: :see_other, notice: "Article was successfully destroyed." }
+      format.html { redirect_to articles_path, status: :see_other, notice: t(".success") }
       format.json { head :no_content }
     end
   end
