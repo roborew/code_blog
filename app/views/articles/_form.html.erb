@@ -20,8 +20,7 @@
     <p>Find me in app/views/public/index.html.erb</p>
   <p data-controller="hello" data-action="click->hello#handleClick"></p>
   </div>
-
-  <div class="field" data-controller="tags">
+  <div class="field" data-controller="tags" data-tags-article-value="<%= @article.tags.to_json %>">
        <%= form.label :tags, "Tags" %>
        <input name="tags" id="tags-input"  data-tags-target="tagsInput" data-action="keyup->tags#handleKeyUp">
   </div>

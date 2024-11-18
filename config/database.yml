@@ -19,7 +19,6 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-
 development:
   <<: *default
   database: code_blog_development
@@ -55,10 +54,7 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  adapter: sqlite3
-  database: storage/test.sqlite3
-  pool: 5
-  timeout: 5000
+  <<: *default
   database: code_blog_test
 
 # As with config/credentials.yml, you never want to store sensitive information,

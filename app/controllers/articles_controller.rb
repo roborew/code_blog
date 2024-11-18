@@ -72,8 +72,9 @@ class ArticlesController < ApplicationController
 
     def update_tags(article)
       if params[:tags].present?
-        tag_names = params[:tags].split(",").map(&:strip)
-        article.tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
+        tag_objects = JSON.parse(params[:tags])
+        tag_names = tag_objects.pluck("value")
+        article.tags = tag_names.map { |name| Tag.find_or_create(name, current_user) }
       else
         article.tags.clear
       end

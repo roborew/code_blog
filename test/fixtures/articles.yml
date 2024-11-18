@@ -7,8 +7,8 @@ one:
   user: morty # This associates the article with the 'one' user fixture
 
 two:
-  title: MyString
-  content: MyText
-  publication_date: 2024-10-13 20:18:19
+  title: My Article Two
+  content: Article Two Content
+  publication_date: 2024-10-20 20:18:19
   user: morty # This associates the article with the 'two' user fixture
 

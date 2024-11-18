@@ -31,6 +31,15 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @user, Article.last.user
   end
 
+  test "should not create article with invalid params" do
+    assert_no_difference("Article.count") do
+      post articles_url(format: :html),
+           params: { article: { title: "", content: @article.content, publication_date: @article.publication_date } }
+    end
+    assert_response :unprocessable_entity
+    assert_template :new
+  end
+
   test "should show article" do
     get article_url(@article)
     assert_response :success
@@ -52,11 +61,74 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to article_url(@article)
   end
 
+  test "should not update article with invalid params" do
+    patch article_url(@article), params: { article: { title: "", content: @article.content, publication_date: @article.publication_date } }
+    assert_response :unprocessable_entity
+    assert_template :edit
+  end
+
   test "should destroy article" do
     assert_difference("Article.count", -1) do
       delete article_url(@article)
     end
 
     assert_redirected_to articles_url
+  end
+
+  test "should create article with tags" do
+    assert_difference([ "Article.count", "Tag.count" ], 1) do
+      post articles_url(format: :html),
+           params: {
+             article: {
+               title: @article.title,
+               content: @article.content,
+               publication_date: @article.publication_date
+             },
+             tags: '[{"value": "newtag"}]'
+           }
+    end
+
+    assert_redirected_to article_url(Article.last)
+    assert_equal [ "newtag" ], Article.last.tags.pluck(:name)
+  end
+
+  test "should create article with existing tags" do
+    Tag.create!(name: "existingtag", user: @user)
+
+    assert_difference("Article.count", 1) do
+      assert_no_difference("Tag.count") do
+        post articles_url(format: :html),
+             params: {
+               article: {
+                 title: @article.title,
+                 content: @article.content,
+                 publication_date: @article.publication_date
+               },
+               tags: '[{"value": "existingtag"}]'
+             }
+      end
+    end
+
+    assert_redirected_to article_url(Article.last)
+    assert_equal [ "existingtag" ], Article.last.tags.pluck(:name)
+  end
+
+  test "should create article with multiple tags" do
+    assert_difference("Article.count", 1) do
+      assert_difference("Tag.count", 2) do
+        post articles_url(format: :html),
+             params: {
+               article: {
+                 title: @article.title,
+                 content: @article.content,
+                 publication_date: @article.publication_date
+               },
+               tags: '[{"value": "tag1"}, {"value": "tag2"}]'
+             }
+      end
+    end
+
+    assert_redirected_to article_url(Article.last)
+    assert_equal [ "tag1", "tag2" ].sort, Article.last.tags.pluck(:name).sort
   end
 end

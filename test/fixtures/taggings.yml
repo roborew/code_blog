@@ -2,8 +2,8 @@
 
 one:
   article: one
-  tag: one
+  tag: tag_1
 
 two:
   article: two
-  tag: two
+  tag: tag_2

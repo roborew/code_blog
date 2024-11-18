@@ -1,10 +1,14 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @article %>
+<h1><%= @article.title %></h1>
+<h3><%= @article.publication_date.strftime("%d %B, %Y") %></h3>
+
+<% @article.tags.each do |tag| %>
+  <span class="tag"><%= tag.name %></span>
+<% end %>
 
 <div>
   <%= link_to "Edit this article", edit_article_path(@article) %> |
   <%= link_to "Back to articles", articles_path %>
-
   <%= button_to "Destroy this article", @article, method: :delete %>
 </div>
