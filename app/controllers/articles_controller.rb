@@ -14,11 +14,12 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
+    @existing_tags = []
   end
 
   # GET /articles/1/edit
   def edit
-    @existing_tags = @article.tags.pluck(:name)
+    @existing_tags = @article.tags.pluck(:name).map { |name| { "name" => name } }.to_json
   end
 
   # POST /articles or /articles.json
@@ -30,6 +31,7 @@ class ArticlesController < ApplicationController
         format.html { redirect_to @article, notice: t(".success") }
         format.json { render :show, status: :created, location: @article }
       else
+        set_existing_tags_from_params
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @article.errors, status: :unprocessable_entity }
       end
@@ -44,6 +46,7 @@ class ArticlesController < ApplicationController
         format.html { redirect_to @article, notice: t(".success") }
         format.json { render :show, status: :ok, location: @article }
       else
+        set_existing_tags_from_params
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @article.errors, status: :unprocessable_entity }
       end
@@ -77,6 +80,13 @@ class ArticlesController < ApplicationController
         article.tags = tag_names.map { |name| Tag.find_or_create(name, current_user) }
       else
         article.tags.clear
+      end
+    end
+
+    def set_existing_tags_from_params
+      if params[:tags].present?
+        tag_objects = JSON.parse(params[:tags])
+        @existing_tags = tag_objects.map { |t| { "name" => t["value"] } }.to_json
       end
     end
 end

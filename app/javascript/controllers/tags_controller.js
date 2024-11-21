@@ -2,17 +2,19 @@ import { Controller } from "@hotwired/stimulus";
 import Tagify from "@yaireo/tagify";
 import "@yaireo/tagify/dist/tagify.css";
 export default class extends Controller {
-  static targets = ["tagsInput"];
+  static targets = ["tags"];
   static values = { article: Array };
 
   connect() {
-    const element = this.tagsInputTarget;
-    // Use the article data from the data attribute
-    const defaultTags = this.articleValue.map((tag) => tag.name);
+    const element = this.tagsTarget;
+    let defaultTags = [];
 
-    element.value = defaultTags.join(",");
+    if (this.articleValue.length > 0) {
+      defaultTags = this.articleValue.map((tag) => tag.name);
+      element.value = defaultTags.join(",");
+    }
 
-    this.tagify = new Tagify(this.tagsInputTarget, {
+    this.tagify = new Tagify(this.tagsTarget, {
       tags: defaultTags,
       enforceWhitelist: false,
       skipInvalid: false,
@@ -45,10 +47,8 @@ export default class extends Controller {
     this.tagify.on("input", (e) => {
       const value = e.detail.value;
       this.tagify.whitelist = null;
-
       clearTimeout(timeout);
       this.tagify.loading(true);
-
       // Debounce the API call by 300ms
       timeout = setTimeout(() => {
         fetch(`/tags/search?q=${value}`)
@@ -60,9 +60,5 @@ export default class extends Controller {
           });
       }, 300);
     });
-  }
-  handleKeyUp() {
-    const element = this.tagsInputTarget;
-    const name = element.value;
   }
 }

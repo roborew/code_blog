@@ -131,4 +131,39 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to article_url(Article.last)
     assert_equal [ "tag1", "tag2" ].sort, Article.last.tags.pluck(:name).sort
   end
+
+  test "should preserve tags when article creation fails" do
+    assert_no_difference([ "Article.count", "Tag.count" ]) do
+      post articles_url(format: :html),
+           params: {
+             article: {
+               title: "", # Invalid title to force failure
+               content: @article.content,
+               publication_date: @article.publication_date
+             },
+             tags: '[{"value": "tag1"}, {"value": "tag2"}]'
+           }
+    end
+
+    assert_response :unprocessable_entity
+    assert_template :new
+    # Verify that @existing_tags was set correctly
+    assert_equal '[{"name":"tag1"},{"name":"tag2"}]', assigns(:existing_tags)
+  end
+
+  test "should handle missing tags parameter" do
+    post articles_url(format: :html),
+         params: {
+           article: {
+             title: "", # Invalid title to force failure
+             content: @article.content,
+             publication_date: @article.publication_date
+           }
+           # Deliberately omitting tags parameter
+         }
+
+    assert_response :unprocessable_entity
+    assert_template :new
+    assert_nil assigns(:existing_tags)
+  end
 end
