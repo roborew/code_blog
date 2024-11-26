@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
-import Tagify from "@yaireo/tagify";
 import "@yaireo/tagify/dist/tagify.css";
+import Tagify from "@yaireo/tagify";
+
 export default class extends Controller {
   static targets = ["tags"];
   static values = { article: Array };
@@ -35,7 +36,6 @@ export default class extends Controller {
     this.tagify.DOM.input.addEventListener("keydown", (e) => {
       const inputValue = this.tagify.DOM.input.textContent; // Changed this line
       if (e.key === "Tab" && inputValue) {
-        e.preventDefault(); // Prevent moving to next field
         this.tagify.addTags([inputValue]); // Wrap in array to ensure proper handling
         this.tagify.DOM.input.textContent = ""; // Clear the input
         this.tagify.dropdown.hide(); // Hide dropdown after adding

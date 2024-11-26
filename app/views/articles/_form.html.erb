@@ -15,21 +15,21 @@
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
   </div>
-<div>
-  <%= @existing_tags %>
-  <p data-controller="hello" data-action="click->hello#handleClick">
-  </p>
-  </div>
 
   <div class="field" data-controller="tags" data-tags-article-value="<%= @existing_tags %>">
-       <%= form.label :tags, "Tags" %>
-       <input name="tags" id="tags-input"  data-tags-target="tags">
+    <%= form.label :tags, "Tags" %>
+    <input name="tags" id="tags-input" data-tags-target="tags">
   </div>
 
   <div>
-    <%= form.label :content, style: "display: block" %>
-    <%= form.text_area :content %>
-  </div>
+    <%= form.label :content, style: "display: block" %>    
+    <div class="content-editor-wrapper">
+      <div data-controller="milkdown">
+        <%= form.hidden_field :content, data: { milkdown_target: "content" } %>
+        <div data-milkdown-target="editor" class="milkdown-wrapper"></div>
+      </div>
+    </div>
+  </d>
 
   <div>
     <%= form.label :publication_date, style: "display: block" %>
@@ -40,3 +40,4 @@
     <%= form.submit %>
   </div>
 <% end %>
+<div id="editor"></div>
