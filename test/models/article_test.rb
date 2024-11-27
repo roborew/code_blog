@@ -24,4 +24,21 @@ class ArticleTest < ActiveSupport::TestCase
     assert article.valid?
     assert_equal "Technology", article.category.name
   end
+
+  test "should default status to draft" do
+    article = Article.new(title: "Test", content: "Content", user: users(:morty))
+    assert_equal "draft", article.status
+  end
+
+  test "can be created with valid status" do
+    article = Article.new(title: "Test", content: "Content", user: users(:morty), status: "published")
+    assert article.valid?
+    assert_equal "published", article.status
+  end
+
+  test "cannot be created with invalid status" do
+    article = Article.new(title: "Test", content: "Content", user: users(:morty), status: "invalid")
+    assert_not article.valid?
+    assert_includes article.errors[:status], "is not included in the list"
+  end
 end

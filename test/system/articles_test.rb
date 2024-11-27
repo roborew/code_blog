@@ -47,4 +47,31 @@ class ArticlesTest < ApplicationSystemTestCase
 
     assert_text "Article was successfully destroyed"
   end
+
+  test "should create article with status" do
+    visit articles_url
+    click_on "New article"
+
+    fill_in "Content", with: @article.content
+    fill_in "Publication date", with: @article.publication_date
+    fill_in "Title", with: @article.title
+    select "Published", from: "Status"
+    click_on "Create Article"
+
+    assert_text "Article was successfully created"
+    assert_equal "published", Article.last.status
+    click_on "Back"
+  end
+
+  test "should update Article status" do
+    visit article_url(@article)
+    click_on "Edit this article", match: :first
+
+    select "Archived", from: "Status"
+    click_on "Update Article"
+
+    assert_text "Article was successfully updated"
+    assert_equal "archived", @article.reload.status
+    click_on "Back"
+  end
 end

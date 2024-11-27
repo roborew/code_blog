@@ -168,7 +168,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create article with category" do
-    assert_difference(["Article.count", "Category.count"], 1) do
+    assert_difference([ "Article.count", "Category.count" ], 1) do
       post articles_url(format: :html),
            params: {
              article: {
@@ -237,5 +237,34 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to article_url(@article)
     @article.reload
     assert_nil @article.category
+  end
+
+  test "should create article with status" do
+    assert_difference("Article.count") do
+      post articles_url, params: {
+        article: {
+          content: @article.content,
+          title: @article.title,
+          publication_date: @article.publication_date,
+          status: "published"
+        }
+      }
+    end
+    assert_redirected_to article_url(Article.last)
+    assert_equal "published", Article.last.status
+  end
+
+  test "should update article status" do
+    patch article_url(@article), params: {
+      article: {
+        content: @article.content,
+        publication_date: @article.publication_date,
+        title: @article.title,
+        status: "archived"
+      }
+    }
+    assert_redirected_to article_url(@article)
+    @article.reload
+    assert_equal "archived", @article.status
   end
 end
