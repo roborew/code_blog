@@ -38,7 +38,15 @@
 
   <div>
     <%= form.label :publication_date, style: "display: block" %>
-    <%= form.datetime_field :publication_date %>
+    <%= form.datetime_field :publication_date, value: Time.now %>
+  </div>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.select :status, 
+                   ["draft", "published", "archived", "scheduled"],
+                   { selected: article.status || "draft" },
+                   { class: "form-select" } %>
   </div>
 
   <div>

@@ -6,4 +6,5 @@ class Article < ApplicationRecord
 
   validates :title, presence: true
   validates :content, presence: true
+  validates :status, inclusion: { in: %w[draft published archived scheduled] }
 end
