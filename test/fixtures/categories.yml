@@ -3,9 +3,9 @@
 one:
   name: MyString
   description: MyText
-  user: one
+  user: morty
 
 two:
   name: MyString
   description: MyText
-  user: two
+  user: rick

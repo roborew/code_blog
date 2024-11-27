@@ -19,7 +19,9 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
+    Rails.logger.debug { "Editing Article ID: #{@article.id} - #{@article.title}" }
     @existing_tags = @article.tags.pluck(:name).map { |name| { "name" => name } }.to_json
+    @existing_category = @article.category&.name
   end
 
   # POST /articles or /articles.json
@@ -28,6 +30,8 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       if @article.save
         update_tags(@article)
+        update_categories(@article)
+        @article.save
         format.html { redirect_to @article, notice: t(".success") }
         format.json { render :show, status: :created, location: @article }
       else
@@ -43,6 +47,8 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       if @article.update(article_params)
         update_tags(@article)
+        update_categories(@article)
+        @article.save
         format.html { redirect_to @article, notice: t(".success") }
         format.json { render :show, status: :ok, location: @article }
       else
@@ -70,7 +76,7 @@ class ArticlesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def article_params
-      params.require(:article).permit(:title, :content, :publication_date, :tags, :category_id)
+      params.require(:article).permit(:title, :content, :publication_date, :tags)
     end
 
     def update_tags(article)
@@ -80,6 +86,17 @@ class ArticlesController < ApplicationController
         article.tags = tag_names.map { |name| Tag.find_or_create(name, current_user) }
       else
         article.tags.clear
+      end
+    end
+
+    def update_categories(article)
+      if params[:category].present?
+        category_objects = JSON.parse(params[:category])
+        category_names = category_objects.pluck("value")
+        category = Category.find_or_create(category_names.first, current_user)
+        article.category = category
+      else
+        article.category = nil
       end
     end
 

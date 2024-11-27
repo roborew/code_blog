@@ -2,6 +2,11 @@ Rails.application.routes.draw do
   devise_for :users
   resources :articles
   get "tags/search", to: "tags#search"
+  get "categories/index"
+  get "categories/new"
+  get "categories/edit"
+  get "categories/search", to: "categories#search"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

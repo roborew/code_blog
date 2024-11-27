@@ -15,6 +15,11 @@
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
   </div>
+<%= @existing_category %>
+  <div class="field" data-controller="categories" data-categories-article-value="<%= @existing_category %>">
+    <%= form.label :categories, "Category" %>
+    <input name="category" id="categories-input" data-categories-target="categories">
+  </div>
 
   <div class="field" data-controller="tags" data-tags-article-value="<%= @existing_tags %>">
     <%= form.label :tags, "Tags" %>

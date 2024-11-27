@@ -166,4 +166,76 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_template :new
     assert_nil assigns(:existing_tags)
   end
+
+  test "should create article with category" do
+    assert_difference(["Article.count", "Category.count"], 1) do
+      post articles_url(format: :html),
+           params: {
+             article: {
+               title: @article.title,
+               content: @article.content,
+               publication_date: @article.publication_date
+             },
+             category: '[{"value": "newcategory"}]'
+           }
+    end
+
+    assert_redirected_to article_url(Article.last)
+    assert_equal "newcategory", Article.last.category.name
+  end
+
+  test "should create article with existing category" do
+    Category.create!(name: "existingcategory", user: @user)
+
+    assert_difference("Article.count", 1) do
+      assert_no_difference("Category.count") do
+        post articles_url(format: :html),
+             params: {
+               article: {
+                 title: @article.title,
+                 content: @article.content,
+                 publication_date: @article.publication_date
+               },
+               category: '[{"value": "existingcategory"}]'
+             }
+      end
+    end
+
+    assert_redirected_to article_url(Article.last)
+    assert_equal "existingcategory", Article.last.category.name
+  end
+
+  test "should update article category" do
+    patch article_url(@article),
+          params: {
+            article: {
+              title: @article.title,
+              content: @article.content,
+              publication_date: @article.publication_date
+            },
+            category: '[{"value": "updatedcategory"}]'
+          }
+
+    assert_redirected_to article_url(@article)
+    @article.reload
+    assert_equal "updatedcategory", @article.category.name
+  end
+
+  test "should remove article category when empty" do
+    @article.update!(category: Category.create!(name: "oldcategory", user: @user))
+
+    patch article_url(@article),
+          params: {
+            article: {
+              title: @article.title,
+              content: @article.content,
+              publication_date: @article.publication_date
+            }
+            # Deliberately omitting category parameter
+          }
+
+    assert_redirected_to article_url(@article)
+    @article.reload
+    assert_nil @article.category
+  end
 end

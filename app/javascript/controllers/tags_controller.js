@@ -15,7 +15,7 @@ export default class extends Controller {
       element.value = defaultTags.join(",");
     }
 
-    this.tagify = new Tagify(this.tagsTarget, {
+    this.tagify = new Tagify(element, {
       tags: defaultTags,
       enforceWhitelist: false,
       skipInvalid: false,
