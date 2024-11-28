@@ -15,7 +15,18 @@
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
   </div>
-<%= @existing_category %>
+
+    <% if article.cover_image.present? %>
+      <div id="<%= dom_id(article, :cover_image) %>">
+        <%= image_tag article.cover_image, alt: "Cover Image", size: 200 %>
+        <%= link_to "Remove cover image", article_cover_image_path(article), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    </div>
+  <% end %>
+  <div>
+    <%= form.label :cover_image, style: "display: block" %>
+    <%= form.file_field :cover_image %>
+  </div>
+
   <div class="field" data-controller="categories" data-categories-article-value="<%= @existing_category %>">
     <%= form.label :categories, "Category" %>
     <input name="category" id="categories-input" data-categories-target="categories">

@@ -1,6 +1,6 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
+import defaultTheme from "tailwindcss/defaultTheme";
 
-module.exports = {
+export default {
   content: [
     "./app/views/**/*.html.erb",
     "./app/helpers/**/*.rb",
@@ -20,4 +20,3 @@ module.exports = {
     require("@tailwindcss/container-queries"),
   ],
 };
-  

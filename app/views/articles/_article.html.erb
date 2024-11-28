@@ -3,6 +3,10 @@
     <strong>Title:</strong>
     <%= article.title %>
   </p>
+
+  <% if article.cover_image.present? %>
+    <%= image_tag article.cover_image, alt: "Cover Image" %>
+  <% end %>
   <p>
     <strong>Status:</strong>
     <%= article.status %>
