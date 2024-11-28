@@ -1,4 +1,6 @@
 class Article < ApplicationRecord
+  STATUSES = %w[Draft Published Archived Scheduled].freeze
+
   belongs_to :user
   belongs_to :category, optional: true
   has_many :taggings, dependent: :destroy
@@ -6,5 +8,5 @@ class Article < ApplicationRecord
 
   validates :title, presence: true
   validates :content, presence: true
-  validates :status, inclusion: { in: %w[draft published archived scheduled] }
+  validates :status, inclusion: { in: STATUSES }
 end

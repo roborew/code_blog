@@ -42,10 +42,10 @@
   </div>
 
   <div>
-    <%= form.label :status, style: "display: block" %>
+    <label style="display: block" for="article_status">Status</label>
     <%= form.select :status, 
-                   ["draft", "published", "archived", "scheduled"],
-                   { selected: article.status || "draft" },
+                   Article::STATUSES,
+                   { selected: article.status || "Draft" },
                    { class: "form-select" } %>
   </div>
 

@@ -2,6 +2,7 @@
 
 <h1><%= @article.title %></h1>
 <h3><%= @article.publication_date.strftime("%d %B, %Y") %></h3>
+<h4><%= @article.status %></h4>
 
 <% @article.tags.each do |tag| %>
   <span class="tag"><%= tag.name %></span>
