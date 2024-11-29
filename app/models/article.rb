@@ -1,5 +1,5 @@
 class Article < ApplicationRecord
-  STATUSES = %w[Draft Published Archived Scheduled].freeze
+  STATUSES = %w[draft published archived scheduled].freeze
 
   belongs_to :user
   belongs_to :category, optional: true

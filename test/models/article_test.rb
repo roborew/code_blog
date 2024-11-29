@@ -14,14 +14,17 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   test "can be created without category" do
-    article = Article.new(title: "Test", content: "Content", user: users(:morty))
+    article = Article.new(title: "Test", content: "Content", user: users(:morty), status: "draft")
     assert article.valid?
   end
 
   test "can be associated with category" do
-    category = Category.create!(name: "Technology", user: users(:morty))
-    article = Article.new(title: "Test", content: "Content", category: category, user: users(:morty))
-    assert article.valid?
+    category = Category.new(name: "Technology", user: users(:morty))
+    assert category.valid?, "Category is invalid: #{category.errors.full_messages}"
+    category.save!
+
+    article = Article.new(title: "Test", content: "Content", category: category, user: users(:morty), status: "published")
+    assert article.valid?, "Article is invalid: #{article.errors.full_messages}"
     assert_equal "Technology", article.category.name
   end
 
@@ -31,9 +34,9 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   test "can be created with valid status" do
-    article = Article.new(title: "Test", content: "Content", user: users(:morty), status: "published")
+    article = Article.new(title: "Test", content: "Content", user: users(:morty), status: "draft")
     assert article.valid?
-    assert_equal "published", article.status
+    assert_equal "draft", article.status
   end
 
   test "cannot be created with invalid status" do

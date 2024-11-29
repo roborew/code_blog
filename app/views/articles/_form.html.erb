@@ -55,11 +55,10 @@
   <div>
     <label style="display: block" for="article_status">Status</label>
     <%= form.select :status, 
-                   Article::STATUSES,
-                   { selected: article.status || "Draft" },
+                   Article::STATUSES.map { |status| [status.capitalize, status] },
+                   { selected: article.status.presence || "Draft" },
                    { class: "form-select" } %>
   </div>
-
   <div>
     <%= form.submit %>
   </div>

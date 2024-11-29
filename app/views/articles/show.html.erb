@@ -2,7 +2,7 @@
 
 <h1><%= @article.title %></h1>
 <h3><%= @article.publication_date.strftime("%d %B, %Y") %></h3>
-<h4><%= @article.status %></h4>
+<h4><%= @article.status.capitalize %></h4>
 <% if @article.cover_image.present? %>
   <%= image_tag @article.cover_image, alt: "Cover Image" %>
 <% end %>

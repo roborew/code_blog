@@ -109,7 +109,7 @@ class ArticlesTest < ApplicationSystemTestCase
 
     # Verify the article was created
     article = Article.last
-    assert_equal "Draft", article.status
+    assert_equal "draft", article.status
     assert_equal "Test Article", article.title
   end
 
@@ -130,7 +130,7 @@ class ArticlesTest < ApplicationSystemTestCase
     click_on "Update Article"
 
     assert_text "Article was successfully updated"
-    assert_equal "Archived", @article.reload.status
+    assert_equal "archived", @article.reload.status
     click_on "Back"
   end
 end

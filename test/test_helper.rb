@@ -14,5 +14,12 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     include Devise::Test::IntegrationHelpers
+    include ActionDispatch::TestProcess
+
+    # Add this helper method for all tests to use
+    def fixture_file_upload(filename = "test_image.jpg", content_type = "image/jpeg")
+      path = Rails.root.join("test", "fixtures", "files", filename)
+      Rack::Test::UploadedFile.new(path, content_type)
+    end
   end
 end

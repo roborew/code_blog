@@ -161,7 +161,6 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
            }
            # Deliberately omitting tags parameter
          }
-
     assert_response :unprocessable_entity
     assert_template :new
     assert_nil assigns(:existing_tags)
@@ -176,17 +175,16 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
                content: @article.content,
                publication_date: @article.publication_date
              },
-             category: '[{"value": "newcategory"}]'
+             category: '[{"value": "Newcategory"}]'
            }
     end
 
     assert_redirected_to article_url(Article.last)
-    assert_equal "newcategory", Article.last.category.name
+    assert_equal "Newcategory", Article.last.category.name
   end
 
   test "should create article with existing category" do
-    Category.create!(name: "existingcategory", user: @user)
-
+    Category.create!(name: "Existingcategory", user: @user)
     assert_difference("Article.count", 1) do
       assert_no_difference("Category.count") do
         post articles_url(format: :html),
@@ -194,15 +192,16 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
                article: {
                  title: @article.title,
                  content: @article.content,
-                 publication_date: @article.publication_date
+                 publication_date: @article.publication_date,
+                 status: "published"
                },
-               category: '[{"value": "existingcategory"}]'
+               category: '[{"value": "Existingcategory"}]'
              }
       end
     end
 
     assert_redirected_to article_url(Article.last)
-    assert_equal "existingcategory", Article.last.category.name
+    assert_equal "Existingcategory", Article.last.category.name
   end
 
   test "should update article category" do
@@ -211,14 +210,15 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
             article: {
               title: @article.title,
               content: @article.content,
-              publication_date: @article.publication_date
+              publication_date: @article.publication_date,
+              status: "draft"
             },
-            category: '[{"value": "updatedcategory"}]'
+            category: '[{"value": "Updatedcategory"}]'
           }
 
     assert_redirected_to article_url(@article)
     @article.reload
-    assert_equal "updatedcategory", @article.category.name
+    assert_equal "Updatedcategory", @article.category.name
   end
 
   test "should remove article category when empty" do
