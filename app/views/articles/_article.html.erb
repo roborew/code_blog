@@ -1,25 +1,25 @@
-<div id="<%= dom_id article %>">
-  <p>
-    <strong>Title:</strong>
-    <%= article.title %>
-  </p>
 
-  <% if article.cover_image.present? %>
-    <%= image_tag article.cover_image, alt: "Cover Image" %>
-  <% end %>
-  <p>
-    <strong>Status:</strong>
-    <%= article.status.capitalize %>
-  </p>
-
-  <p>
-    <strong>Content:</strong>
-    <%= article.content %>
-  </p>
-
-  <p>
-    <strong>Publication date:</strong>
-    <%= article.publication_date %>
-  </p>
-
-</div>
+<article class="bg-white p-4 shadow rounded-lg flex" id="<%= dom_id article %>">
+   <div class="w-1/4 flex-shrink-0 mr-4">
+       <% if article.cover_image.present? %>
+           <%= link_to article do %>
+               <%= image_tag article.cover_image, alt: "Cover Image", class: "w-full rounded-lg m-0" %>
+           <% end %>
+       <% else %>
+           <%= link_to article do %>
+               <%= image_tag "placeholder_image.webp", alt: "Default Cover Image", class: "w-full rounded-lg m-0" %>
+           <% end %>
+       <% end %>
+   </div>
+   <div>
+       <h2 class="font-bold text-lg"><%= link_to article.title, article %></h2>
+       <p class="text-gray-500 text-sm mb-2">
+           <%= article.publication_date&.strftime("%B %d, %Y") %> 
+           <% if article.category %> 
+           | <%= article.category.name %>
+           <% end %>
+       </p>
+       <p class="text-gray-700"><%= article.abstract %>
+        <%= link_to "Show this article", article, class: "text-blue-500" %>
+   </div>
+</article> 

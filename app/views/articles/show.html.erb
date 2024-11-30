@@ -1,21 +1,38 @@
-<p style="color: green"><%= notice %></p>
+<article class="bg-white p-4 shadow rounded-lg">
+    <!-- Action buttons -->
+<%= render 'article_header_links', current_page: 'show' %>
 
-<h1><%= @article.title %></h1>
-<h3><%= @article.publication_date.strftime("%d %B, %Y") %></h3>
-<h4><%= @article.status.capitalize %></h4>
-<% if @article.cover_image.present? %>
-  <%= image_tag @article.cover_image, alt: "Cover Image" %>
-<% end %>
-<% @article.tags.each do |tag| %>
-  <span class="tag"><%= tag.name %></span>
-<% end %>
+    <!-- Cover image -->
+  <% if @article.cover_image.present? %>
+    <div class="mb-6 relative h-[300px] overflow-hidden">
+      <%= image_tag @article.cover_image.representation(resize_to_limit: [1200, 300]), 
+          alt: "Cover Image", 
+          class: "w-full h-full object-cover absolute inset-0" %>
+    </div>
+  <% end %>
+  <!-- Header section -->
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold mb-2 mt-2"><%= @article.title %></h1>
+    <div class="text-gray-600 mb-4">
+      <h3 class="text-sm">
+        <%= @article.publication_date&.strftime("%B %d, %Y") %> 
+        <% if @article.category %> 
+        | <%= @article.category.name %>
+        <% end %>
+      </h3>
+      <h4 class="text-sm"><%= @article.status.capitalize %></h4>
+    </div>
+    
+    <!-- Tags section -->
+    <div class="flex gap-2 mb-4">
+      <% @article.tags.each do |tag| %>
+        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"><%= tag.name %></span>
+      <% end %>
+    </div>
+  </header>
+  <!-- Article content -->
+  <div class="prose max-w-none mb-8" data-controller="clipboard">
+    <%= markdown(@article.content) %>
+  </div>
 
-<div>
-  <%= @article.content %>
-</div>
-
-<div>
-  <%= link_to "Edit this article", edit_article_path(@article) %> |
-  <%= link_to "Back to articles", articles_path %>
-  <%= button_to "Destroy this article", @article, method: :delete %>
-</div>
+</article>

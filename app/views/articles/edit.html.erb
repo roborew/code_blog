@@ -1,10 +1,12 @@
-<% content_for :title, "Editing article" %>
+<article class="bg-white p-4 shadow rounded-lg">
+<%= render 'article_header_links', current_page: 'edit' %>
 
-<h1>Editing article</h1>
 
-<%= render "form", article: @article %>
+  <div class="w-full">
+    <% content_for :title, "Editing: #{@article.title}" %>
+    <h1 class="text-2xl font-bold mb-4">Editing: <%= @article.title %></h1>
+    <%= render "form", article: @article %>
+  </div>
+</article>
 
-<div>
-  <%= link_to "Show this article", @article %> |
-  <%= link_to "Back to articles", articles_path %>
-</div>
+

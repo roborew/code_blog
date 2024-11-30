@@ -1,11 +1,12 @@
-<% content_for :title, "New article" %>
-
-<h1>New article</h1>
-
-<%= render "form", article: @article %>
-
-<br>
-
-<div>
-  <%= link_to "Back to articles", articles_path %>
-</div>
+<article class="bg-white p-4 shadow rounded-lg flex">
+<div class="w-full">
+  <% content_for :title, "New article" %>
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Editing: New Article</h1>
+    <div>
+      <%= link_to "Back to articles", articles_path, class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+  </div>
+  <%= render "form", article: @article %>
+  </div>
+</article>

@@ -12,3 +12,6 @@ application.register("tags", TagsController);
 
 import MilkdownController from "./milkdown_controller.js";
 application.register("milkdown", MilkdownController);
+
+import CodeCopyController from "./code_copy_controller.js";
+application.register("code-copy", CodeCopyController);
