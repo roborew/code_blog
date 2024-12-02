@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  require "open-uri"
+
   before_action :authenticate_user!, except: [ :index, :show ]
   before_action :set_article, only: [ :show, :edit, :update, :destroy ]
 
@@ -27,6 +29,10 @@ class ArticlesController < ApplicationController
   # POST /articles or /articles.json
   def create
     @article = current_user.articles.build(article_params)
+
+    # Process inline images and attach them to content_images
+    @article.content = process_inline_images(@article.content)
+
     respond_to do |format|
       if @article.save
         update_tags(@article)
@@ -45,7 +51,11 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1 or /articles/1.json
   def update
     respond_to do |format|
-      if @article.update(article_params)
+      # Process inline images and attach them to content_images
+      article_params_with_processed_images = article_params
+      article_params_with_processed_images[:content] = process_inline_images(article_params[:content])
+
+      if @article.update(article_params_with_processed_images)
         update_tags(@article)
         update_categories(@article)
         @article.save
@@ -105,5 +115,38 @@ class ArticlesController < ApplicationController
         tag_objects = JSON.parse(params[:tags])
         @existing_tags = tag_objects.map { |t| { "name" => t["value"] } }.to_json
       end
+    end
+
+    def process_inline_images(content)
+      content.gsub(/!\[([^\]]*)\]\((https?:\/\/[^\/]+\/temp-file\/([^\)]+))\)/) do |match|
+        alt_text = $1
+        filename = $3
+
+        begin
+          # Get the file directly from tmp/uploads directory
+          base_filename = filename.split(".").first
+          file_path = Rails.root.join("tmp/uploads").glob("#{base_filename}.*").first
+
+          if file_path && File.exist?(file_path)
+            decoded_data = File.binread(file_path)
+            content_type = Marcel::MimeType.for(file_path)
+
+            image = @article.content_images.attach(
+              io: StringIO.new(decoded_data),
+              filename: "#{SecureRandom.uuid}#{File.extname(file_path)}",
+              content_type: content_type
+            ).first
+
+            "![#{alt_text}](#{rails_blob_url(image)})\r\n"
+          else
+            Rails.logger.error "Temp file not found: #{filename}"
+            match
+          end
+        rescue => e
+          Rails.logger.error "Error processing image: #{e.class} - #{e.message}"
+          Rails.logger.error e.backtrace.join("\n")
+          match
+        end
+      end + "\r\n"
     end
 end

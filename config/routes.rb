@@ -23,4 +23,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "pages#home"
+
+  post "uploads/upload_image", to: "uploads#upload_image"
+  get "temp-file/:filename", to: "uploads#serve_temp_file", as: :serve_temp_file
 end

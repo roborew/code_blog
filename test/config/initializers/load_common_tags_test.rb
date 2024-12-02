@@ -21,17 +21,17 @@ class LoadCommonTagsTest < ActiveSupport::TestCase
 
   def test_initializer_loads_config
     yaml_content = {
-      "test" => { "common_tags" => ["tag1", "tag2"] }
+      "test" => { "common_tags" => [ "tag1", "tag2" ] }
     }
     File.write(@config_file, yaml_content.to_yaml)
 
     load Rails.root.join("config/initializers/load_common_tags.rb")
-    assert_equal ["tag1", "tag2"], Rails.application.config.common_tags
+    assert_equal [ "tag1", "tag2" ], Rails.application.config.common_tags
   end
 
   def test_initializer_handles_missing_config_file
     load Rails.root.join("config/initializers/load_common_tags.rb")
-    
+
     assert_equal [], Rails.application.config.common_tags
     assert_includes @log_buffer.string, "Common tags configuration file not found at #{@config_file}"
   end
@@ -40,7 +40,7 @@ class LoadCommonTagsTest < ActiveSupport::TestCase
     File.write(@config_file, ": invalid: yaml: content")
 
     load Rails.root.join("config/initializers/load_common_tags.rb")
-    
+
     assert_equal [], Rails.application.config.common_tags
     assert_includes @log_buffer.string, "Error loading common tags configuration:"
   end
