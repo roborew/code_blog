@@ -28,7 +28,7 @@ module ApplicationHelper
       "<div class='code-block-container' data-controller='code-copy'>
         <div class='flex items-center justify-between px-4 py-2 bg-gray-100 border-b'>
           <span class='text-sm text-gray-600'>#{label}</span>
-          <button class='inline-flex items-center px-3 py-1 text-sm text-gray-600 bg-white rounded border 
+          <button class='inline-flex items-center px-3 py-1 text-sm text-gray-600 bg-white rounded border
                        hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
                        transition-colors duration-150 ease-in-out'
                   data-action='click->code-copy#copy'
@@ -39,6 +39,17 @@ module ApplicationHelper
         </div>
         #{code_block}
       </div>"
+    end
+
+    def image(link, title, alt_text)
+      if title
+        "<figure class='text-center'>
+          <img src='#{link}' alt='#{alt_text}' class='mx-auto'>
+          <figcaption class='text-sm text-gray-600 mt-2'>#{title}</figcaption>
+        </figure>"
+      else
+        "<img src='#{link}' alt='#{alt_text}' class='mx-auto'>"
+      end
     end
   end
 end

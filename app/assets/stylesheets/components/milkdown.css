@@ -6,7 +6,10 @@
   
   .milkdown-wrapper {
     /* Add any specific editor styling */
-    border: 1px solid #ccc;
     border-radius: 4px;
     min-height: 200px;
   } 
+
+  .milkdown .ProseMirror { 
+    padding: 10px 0 10px 70px;
+  }
