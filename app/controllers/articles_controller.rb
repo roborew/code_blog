@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   include InlineImageProcessor
-
+  before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!, except: [ :index, :show ]
   before_action :set_article, only: [ :show, :edit, :update, :destroy ]
 

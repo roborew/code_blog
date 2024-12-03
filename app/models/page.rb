@@ -9,6 +9,10 @@ class Page < ApplicationRecord
 
   before_destroy :purge_content_images
 
+  has_paper_trail versions: {
+    scope: -> { order(created_at: :desc) }
+  }
+
   private
 
   def purge_content_images

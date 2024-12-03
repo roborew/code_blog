@@ -25,6 +25,10 @@ class Article < ApplicationRecord
     title_changed?
   end
 
+  has_paper_trail versions: {
+    scope: -> { order(created_at: :desc) }
+  }
+
   private
 
   def abstract_word_limit
