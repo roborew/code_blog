@@ -17,7 +17,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create page" do
-    assert_difference("Page.count") do
+    assert_difference('Page.count') do
       post pages_url, params: { page: { title: "New Page", content: "New content" } }
     end
 
@@ -40,7 +40,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy page" do
-    assert_difference("Page.count", -1) do
+    assert_difference('Page.count', -1) do
       delete page_url(@page)
     end
 
