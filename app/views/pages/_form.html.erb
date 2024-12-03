@@ -15,13 +15,10 @@
     <%= form.text_field :title %>
   </div>
 
-  <div class="field">
-    <%= form.label :content %>
-    <%= form.text_area :content %>
-  </div>
+<%= render partial: 'shared/milkdown_editor', locals: { form: form, field_name: :content } %>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" %>
   </div>
 <% end %>
  

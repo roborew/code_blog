@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  include InlineImageProcessor
+
   before_action :set_page, only: %i[show edit update destroy]
 
   def index
@@ -16,8 +18,10 @@ class PagesController < ApplicationController
   end
   def create
     @page = Page.new(page_params)
+    @page.content = process_inline_images(@page.content)
+
     if @page.save
-      redirect_to @page, notice: t('.success')
+      redirect_to @page, notice: t(".success")
     else
       render :new
     end
@@ -25,8 +29,11 @@ class PagesController < ApplicationController
 
 
   def update
-    if @page.update(page_params)
-      redirect_to @page, notice: t('.success')
+    params_with_processed_images = page_params
+    params_with_processed_images[:content] = process_inline_images(page_params[:content])
+
+    if @page.update(params_with_processed_images)
+      redirect_to @page, notice: t(".success")
     else
       render :edit
     end
@@ -34,7 +41,7 @@ class PagesController < ApplicationController
 
   def destroy
     @page.destroy
-    redirect_to pages_url, notice: t('.success')
+    redirect_to pages_url, notice: t(".success")
   end
 
   private

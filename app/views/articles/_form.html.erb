@@ -54,16 +54,7 @@
   </div>
 
 
-  <div class="mb-4">
-    <%= form.label :content, class: "block text-gray-700 text-sm font-bold mb-2" %>    
-    <div class="content-editor-wrapper">
-      <div data-controller="milkdown">
-        <%= form.hidden_field :content, data: { milkdown_target: "content" } %>
-        <div data-milkdown-target="editor" class="milkdown-wrapper"></div>
-      </div>
-    </div>
-  </div>
-
+<%= render partial: 'shared/milkdown_editor', locals: { form: form, field_name: :content } %>
 
   <div class="mb-4">
     <%= form.label :status, class: "block text-gray-700 text-sm font-bold mb-2" %>
@@ -74,6 +65,6 @@
   </div>
 
   <div class="mt-6">
-    <%= form.submit class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" %>
+    <%= form.submit class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" %>
   </div>
 <% end %>

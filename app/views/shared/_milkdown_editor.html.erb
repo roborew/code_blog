@@ -1,0 +1,9 @@
+  <div class="mb-4">
+    <%= form.label field_name, class: "block text-gray-700 text-sm font-bold mb-2" %>    
+    <div class="content-editor-wrapper">
+      <div data-controller="milkdown">
+        <%= form.hidden_field field_name, data: { milkdown_target: "content" } %>
+        <div data-milkdown-target="editor" class="milkdown-wrapper"></div>
+      </div>
+    </div>
+  </div>
