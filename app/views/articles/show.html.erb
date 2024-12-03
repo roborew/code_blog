@@ -13,6 +13,9 @@
   <!-- Header section -->
   <header class="mb-6">
     <h1 class="text-3xl font-bold mb-2 mt-2"><%= @article.title %></h1>
+    <% if @article.subheading.present? %>
+      <h3><%= @article.subheading %></h3>
+    <% end %>
     <div class="text-gray-600 mb-4">
       <h3 class="text-sm">
         <%= @article.publication_date&.strftime("%B %d, %Y") %> 

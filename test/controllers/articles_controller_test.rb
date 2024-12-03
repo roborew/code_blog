@@ -27,7 +27,14 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create article" do
     assert_difference("Article.count") do
-      post articles_url, params: { article: { content: @article.content, title: @article.title, publicate_date: @article.publication_date }  }
+      post articles_url, params: { 
+        article: { 
+          content: @article.content, 
+          title: @article.title,
+          subheading: @article.subheading,
+          publication_date: @article.publication_date 
+        }  
+      }
     end
     assert_redirected_to article_url(Article.last)
     assert_equal @user, Article.last.user
@@ -36,7 +43,12 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   test "should not create article with invalid params" do
     assert_no_difference("Article.count") do
       post articles_url(format: :html),
-           params: { article: { title: "", content: @article.content, publication_date: @article.publication_date } }
+           params: { article: { 
+             title: "", 
+             subheading: @article.subheading,
+             content: @article.content, 
+             publication_date: @article.publication_date 
+           } }
     end
     assert_response :unprocessable_entity
     assert_template :new
@@ -59,7 +71,14 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update article" do
-    patch article_url(@article), params: { article: { content: @article.content, publication_date: @article.publication_date, title: @article.title } }
+    patch article_url(@article), params: { 
+      article: { 
+        content: @article.content,
+        subheading: @article.subheading, 
+        publication_date: @article.publication_date, 
+        title: @article.title 
+      } 
+    }
     assert_redirected_to article_url(@article)
   end
 

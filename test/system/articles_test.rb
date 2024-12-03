@@ -12,12 +12,13 @@ class ArticlesTest < ApplicationSystemTestCase
   test "visiting the index" do
     sign_out @user
     visit articles_url
+    # TODO: neeeds updating to look for PAGY
     assert_selector "h1", text: "Articles"
   end
 
   test "should create article" do
     visit articles_url
-    click_on "New article"
+    click_on "Create New Article"
 
     # Wait for the hidden field to be present in the DOM, including hidden elements
     assert_selector '[data-milkdown-target="content"]', visible: :all
@@ -53,14 +54,17 @@ class ArticlesTest < ApplicationSystemTestCase
 
   test "should destroy Article" do
     visit article_url(@article)
-    click_on "Destroy this article", match: :first
+
+    accept_confirm do
+      click_on "Destroy this article", match: :first
+    end
 
     assert_text "Article was successfully destroyed"
   end
 
   test "should create article with status" do
     visit articles_url
-    click_on "New article"
+    click_on "Create New Article"
 
     # Fill in the required fields
     fill_in "article[title]", with: "Test Article"
@@ -132,5 +136,34 @@ class ArticlesTest < ApplicationSystemTestCase
     assert_text "Article was successfully updated"
     assert_equal "archived", @article.reload.status
     click_on "Back"
+  end
+
+  test "creating an article" do
+    visit articles_url
+    click_on "New Article"
+
+    fill_in "Title", with: "Test Article"
+
+    # Wait for the hidden field to be present in the DOM
+    assert_selector '[data-milkdown-target="content"]', visible: :all
+    # Set the content using JavaScript
+    page.execute_script("document.querySelector('[data-milkdown-target=\"content\"]').value = 'Some content'")
+
+    fill_in "Publication date", with: @article.publication_date
+    click_on "Create Article"
+
+    assert_text "Article was successfully created."
+    assert_text "Test Article"
+  end
+
+  test "updating an article" do
+    visit article_url(@article)
+    click_on "Edit", match: :first
+
+    fill_in "Title", with: "Updated Title"
+    click_on "Update Article"
+
+    assert_text "Article was successfully updated"
+    assert_text "Updated Title"
   end
 end

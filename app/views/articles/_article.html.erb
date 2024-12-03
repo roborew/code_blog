@@ -13,6 +13,9 @@
    </div>
    <div>
        <h2 class="font-bold text-lg"><%= link_to article.title, article %></h2>
+       <% if article.subheading.present? %>
+         <h3><%= article.subheading %></h3>
+       <% end %>
        <p class="text-gray-500 text-sm mb-2">
            <%= article.publication_date&.strftime("%B %d, %Y") %> 
            <% if article.category %> 
