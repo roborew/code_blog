@@ -23,6 +23,7 @@ module InlineImageProcessor
             content_type: content_type
           ).first
 
+          # Add a single line break after each image for proper markdown formatting
           "![#{alt_text}](#{rails_blob_url(image)})\r\n"
         else
           Rails.logger.error "Temp file not found: #{filename}"

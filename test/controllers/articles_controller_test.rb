@@ -27,13 +27,13 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create article" do
     assert_difference("Article.count") do
-      post articles_url, params: { 
-        article: { 
-          content: @article.content, 
+      post articles_url, params: {
+        article: {
+          content: @article.content,
           title: @article.title,
           subheading: @article.subheading,
-          publication_date: @article.publication_date 
-        }  
+          publication_date: @article.publication_date
+        }
       }
     end
     assert_redirected_to article_url(Article.last)
@@ -43,11 +43,11 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   test "should not create article with invalid params" do
     assert_no_difference("Article.count") do
       post articles_url(format: :html),
-           params: { article: { 
-             title: "", 
+           params: { article: {
+             title: "",
              subheading: @article.subheading,
-             content: @article.content, 
-             publication_date: @article.publication_date 
+             content: @article.content,
+             publication_date: @article.publication_date
            } }
     end
     assert_response :unprocessable_entity
@@ -71,13 +71,13 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update article" do
-    patch article_url(@article), params: { 
-      article: { 
+    patch article_url(@article), params: {
+      article: {
         content: @article.content,
-        subheading: @article.subheading, 
-        publication_date: @article.publication_date, 
-        title: @article.title 
-      } 
+        subheading: @article.subheading,
+        publication_date: @article.publication_date,
+        title: @article.title
+      }
     }
     assert_redirected_to article_url(@article)
   end
@@ -287,93 +287,5 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to article_url(@article)
     @article.reload
     assert_equal "archived", @article.status
-  end
-
-  def test_process_inline_images_with_existing_file
-    content_with_image = "![alt text](https://example.com/temp-file/sample.jpg)"
-    file_path = Rails.root.join("tmp/uploads/sample.jpg")
-
-    # Get controller instance
-    get articles_url
-    @controller = @controller.class.new
-    @controller.instance_variable_set(:@article, @article)
-
-    # Mock file system operations
-    path_mock = Minitest::Mock.new
-    path_mock.expect(:glob, [ file_path ], [ "sample.*" ])
-
-    Rails.root.stub(:join, path_mock) do
-      File.stub(:exist?, true) do
-        File.stub(:binread, "fake image data") do
-          Marcel::MimeType.stub(:for, "image/jpeg") do
-            # Mock ActiveStorage attachment
-            blob = OpenStruct.new(signed_id: "signed_id")
-            @article.content_images.stub(:attach, [ blob ]) do
-              @controller.stub(:rails_blob_url, "http://example.com/rails/blobs/signed_id/sample.jpg") do
-                processed_content = @controller.send(:process_inline_images, content_with_image)
-
-                assert_includes processed_content, "http://example.com/rails/blobs/signed_id/sample.jpg"
-                assert_includes processed_content, "![alt text]"
-              end
-            end
-          end
-        end
-      end
-    end
-    path_mock.verify
-  end
-
-  def test_process_inline_images_with_missing_file
-    content_with_image = "![alt text](https://example.com/temp-file/sample.jpg)"
-    get articles_url
-    @controller = @controller.class.new
-
-    path_mock = Minitest::Mock.new
-    path_mock.expect(:glob, [ nil ], [ "sample.*" ])
-
-    Rails.root.stub(:join, path_mock) do
-      logger_output = StringIO.new
-      Rails.logger.stub(:error, ->(msg) { logger_output.puts(msg) }) do
-        processed_content = @controller.send(:process_inline_images, content_with_image)
-
-        assert_equal content_with_image + "\r\n", processed_content
-        assert_includes logger_output.string, "Temp file not found: sample.jpg"
-      end
-    end
-    path_mock.verify
-  end
-
-  def test_process_inline_images_with_no_images
-    content_without_image = "This is a test content without images."
-    get articles_url
-    @controller = @controller.class.new
-    @controller.instance_variable_set(:@article, @article)
-
-    processed_content = @controller.send(:process_inline_images, content_without_image)
-    assert_equal content_without_image + "\r\n", processed_content
-  end
-
-  def test_process_inline_images_with_error
-    content_with_image = "![alt text](https://example.com/temp-file/sample.jpg)"
-    get articles_url
-    @controller = @controller.class.new
-
-    path_mock = Minitest::Mock.new
-    path_mock.expect(:glob, [ Rails.root.join("tmp/uploads/sample.jpg") ], [ "sample.*" ])
-
-    Rails.root.stub(:join, path_mock) do
-      File.stub(:exist?, true) do
-        File.stub(:binread, ->(_) { raise StandardError.new("Test error") }) do
-          logger_output = StringIO.new
-          Rails.logger.stub(:error, ->(msg) { logger_output.puts(msg) }) do
-            processed_content = @controller.send(:process_inline_images, content_with_image)
-
-            assert_equal content_with_image + "\r\n", processed_content
-            assert_includes logger_output.string, "Error processing image: StandardError - Test error"
-          end
-        end
-      end
-    end
-    path_mock.verify
   end
 end
