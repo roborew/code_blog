@@ -68,3 +68,4 @@ gem "devise", "~> 4.9"
 
 gem "redcarpet"
 gem "coderay"
+gem "friendly_id"

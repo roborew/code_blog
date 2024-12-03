@@ -79,9 +79,15 @@ class ArticlesController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_article
-      @article = Article.find(params[:id])
+        @article = Article.friendly.find(params[:id])
+
+        # Only perform the redirect check for the show action
+        if action_name == "show" && request.path != article_path(@article)
+          redirect_to @article, status: :moved_permanently
+        end
     end
 
     # Only allow a list of trusted parameters through.

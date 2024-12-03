@@ -1,4 +1,7 @@
 class Article < ApplicationRecord
+  extend FriendlyId
+  friendly_id :title, use: [:slugged, :history]
+
   STATUSES = %w[draft published archived scheduled].freeze
 
   belongs_to :user
@@ -16,6 +19,11 @@ class Article < ApplicationRecord
 
   before_destroy :purge_cover_image
   before_destroy :purge_content_images
+
+  # Override this method to regenerate the slug when the title changes
+  def should_generate_new_friendly_id?
+    title_changed?
+  end
 
   private
 
