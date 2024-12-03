@@ -1,4 +1,13 @@
-<h1><%= @page.title %></h1>
-<p><%= @page.content %></p>
-<%= link_to 'Edit', edit_page_path(@page) %> |
-<%= link_to 'Back', pages_path %>
+<article class="bg-white p-4 shadow rounded-lg">
+  <!-- Action buttons -->
+    <%= render 'page_header_links', current_page: 'show' %>
+
+  <!-- Header section -->
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold mb-2 mt-2"><%= @page.title %></h1>
+  </header>
+  <!-- Page content -->
+  <div class="prose max-w-none mb-8" data-controller="clipboard">
+    <%= markdown(@page.content) %>
+  </div>
+</article>

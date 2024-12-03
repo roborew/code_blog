@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "pages#home"
+  root "articles#index"
 
   post "uploads/upload_image", to: "uploads#upload_image"
   get "temp-file/:filename", to: "uploads#serve_temp_file", as: :serve_temp_file

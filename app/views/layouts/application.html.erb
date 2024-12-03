@@ -22,17 +22,16 @@
             <h1 class="text-xl font-bold">Robins Blog</h1>
             <nav>
                 <ul class="flex space-x-4">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-500">Home</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-500">About</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-500">Contact</a></li>
-                        <% if user_signed_in? %>
-                            <li><%= link_to "Profile", edit_user_registration_path %></li>
-                            <li><%= link_to "Create New Article", new_article_path %></li>
-                            <li><%= button_to "Log Out", destroy_user_session_path, method: :delete %></li>
-                        <% else %>
-                            <li><%= link_to "Log In", new_user_session_path %></li>
-                            <li><%= link_to "Sign Up", new_user_registration_path %></li>
-                        <% end %>
+                    <li><%= link_to "Home", root_path %></li>
+                    <%= render "shared/nav_pages" %>
+                    <% if user_signed_in? %>
+                        <li><%= link_to "Profile", edit_user_registration_path %></li>
+                        <li><%= link_to "Create New Article", new_article_path %></li>
+                        <li><%= button_to "Log Out", destroy_user_session_path, method: :delete %></li>
+                    <% else %>
+                        <li><%= link_to "Log In", new_user_session_path %></li>
+                        <li><%= link_to "Sign Up", new_user_registration_path %></li>
+                    <% end %>
                 </ul>
             </nav>
         </div>
