@@ -1,0 +1,9 @@
+about:
+  title: About Us
+  content: This is the about page content
+  slug: about-us
+
+contact:
+  title: Contact
+  content: This is the contact page content
+  slug: contact 

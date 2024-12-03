@@ -1,8 +1,49 @@
 require "test_helper"
 
 class PagesControllerTest < ActionDispatch::IntegrationTest
-  test "should get home" do
-    get root_url
+  setup do
+    @page = pages(:about) # Assuming you have a fixture named 'about'
+  end
+
+  test "should get index" do
+    get pages_url
     assert_response :success
+    assert_not_nil assigns(:pages)
+  end
+
+  test "should get new" do
+    get new_page_url
+    assert_response :success
+  end
+
+  test "should create page" do
+    assert_difference("Page.count") do
+      post pages_url, params: { page: { title: "New Page", content: "New content" } }
+    end
+
+    assert_redirected_to page_url(Page.last)
+  end
+
+  test "should show page" do
+    get page_url(@page)
+    assert_response :success
+  end
+
+  test "should get edit" do
+    get edit_page_url(@page)
+    assert_response :success
+  end
+
+  test "should update page" do
+    patch page_url(@page), params: { page: { title: "Updated Title", content: "Updated content" } }
+    assert_redirected_to page_url(@page)
+  end
+
+  test "should destroy page" do
+    assert_difference("Page.count", -1) do
+      delete page_url(@page)
+    end
+
+    assert_redirected_to pages_url
   end
 end
