@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   resources :pages
   resources :articles do
     resource :cover_image, only: :destroy, module: :articles
+    member do
+      post :revert
+    end
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

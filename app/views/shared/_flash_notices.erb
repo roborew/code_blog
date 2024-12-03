@@ -1,0 +1,12 @@
+<div id="flash_notices">
+<% if notice || alert %>
+                    <article class="bg-white p-4 shadow rounded-lg flex">
+                        <% if notice %>
+                            <p class="notice text-green-600"><%= notice %></p>
+                        <% end %>
+                        <% if alert %>
+                            <p class="alert text-red-600"><%= alert %></p>
+                        <% end %>
+    </article>
+<% end %>
+</div>

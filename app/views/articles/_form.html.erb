@@ -1,70 +1,72 @@
-<%= form_with(model: article) do |form| %>
-  <% if article.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(article.errors.count, "error") %> prohibited this article from being saved:</h2>
-      <ul>
-        <% article.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<div id="article-form">
+  <%= form_with(model: article) do |form| %>
+    <% if article.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(article.errors.count, "error") %> prohibited this article from being saved:</h2>
+        <ul>
+          <% article.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-4">
+      <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.text_field :title, class: "w-full" %>
+    </div>
+
+    <div class="mb-4">
+      <%= form.label :subheading, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.text_field :subheading, class: "w-full" %>
+    </div>
+
+    <% if article.cover_image.present? %>
+        <div id="<%= article.persisted? ? dom_id(article, :cover_image) : 'new_cover_image' %>" class="mb-4">
+            <%= image_tag article.cover_image, alt: "Cover Image", size: 200 %>
+            <%= link_to "Remove cover image", article_cover_image_path(article), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>      
+        </div>
+    <% end %>
+    <div class="mb-4">
+      <%= form.label :cover_image, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.file_field :cover_image %>
+    </div>
+
+    <div class="field mb-4" data-controller="categories" data-categories-article-value="<%= @existing_category %>">
+      <%= form.label :categories, "Category", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <input name="category" id="categories-input" data-categories-target="categories" class="w-full">
+    </div>
+
+    <div class="field mb-4" data-controller="tags" data-tags-article-value="<%= @existing_tags %>">
+      <%= form.label :tags, "Tags", class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <input name="tags" id="tags-input" data-tags-target="tags" class="w-full">
+    </div>
+
+    <div class="mb-4">
+      <%= form.label :abstract, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.text_area :abstract, rows: 3, 
+          class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+          placeholder: "Enter a brief summary of your article..." %>
+    </div>
+
+    <div class="mb-4">
+      <%= form.label :publication_date, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.datetime_field :publication_date, value: Time.now, class: "w-full" %>
+    </div>
+
+
+  <%= render partial: 'shared/milkdown_editor', locals: { form: form, field_name: :content } %>
+
+    <div class="mb-4">
+      <%= form.label :status, class: "block text-gray-700 text-sm font-bold mb-2" %>
+      <%= form.select :status, 
+                     Article::STATUSES.map { |status| [status.capitalize, status] },
+                     { selected: article.status.presence || "Draft" },
+                     { class: "form-select w-full" } %>
+    </div>
+
+    <div class="mt-6">
+      <%= form.submit class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" %>
     </div>
   <% end %>
-
-  <div class="mb-4">
-    <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <%= form.text_field :title, class: "w-full" %>
-  </div>
-
-  <div class="mb-4">
-    <%= form.label :subheading, class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <%= form.text_field :subheading, class: "w-full" %>
-  </div>
-
-  <% if article.cover_image.present? %>
-      <div id="<%= article.persisted? ? dom_id(article, :cover_image) : 'new_cover_image' %>" class="mb-4">
-          <%= image_tag article.cover_image, alt: "Cover Image", size: 200 %>
-          <%= link_to "Remove cover image", article_cover_image_path(article), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>      
-      </div>
-  <% end %>
-  <div class="mb-4">
-    <%= form.label :cover_image, class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <%= form.file_field :cover_image %>
-  </div>
-
-  <div class="field mb-4" data-controller="categories" data-categories-article-value="<%= @existing_category %>">
-    <%= form.label :categories, "Category", class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <input name="category" id="categories-input" data-categories-target="categories" class="w-full">
-  </div>
-
-  <div class="field mb-4" data-controller="tags" data-tags-article-value="<%= @existing_tags %>">
-    <%= form.label :tags, "Tags", class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <input name="tags" id="tags-input" data-tags-target="tags" class="w-full">
-  </div>
-
-  <div class="mb-4">
-    <%= form.label :abstract, class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <%= form.text_area :abstract, rows: 3, 
-        class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-        placeholder: "Enter a brief summary of your article..." %>
-  </div>
-
-  <div class="mb-4">
-    <%= form.label :publication_date, class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <%= form.datetime_field :publication_date, value: Time.now, class: "w-full" %>
-  </div>
-
-
-<%= render partial: 'shared/milkdown_editor', locals: { form: form, field_name: :content } %>
-
-  <div class="mb-4">
-    <%= form.label :status, class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <%= form.select :status, 
-                   Article::STATUSES.map { |status| [status.capitalize, status] },
-                   { selected: article.status.presence || "Draft" },
-                   { class: "form-select w-full" } %>
-  </div>
-
-  <div class="mt-6">
-    <%= form.submit class: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" %>
-  </div>
-<% end %>
+</div>

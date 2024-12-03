@@ -2,7 +2,7 @@ class ArticlesController < ApplicationController
   include InlineImageProcessor
   before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!, except: [ :index, :show ]
-  before_action :set_article, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_article, only: [ :show, :edit, :update, :destroy, :revert ]
 
   # GET /articles or /articles.json
   def index
@@ -21,7 +21,6 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
-    Rails.logger.debug { "Editing Article ID: #{@article.id} - #{@article.title}" }
     @existing_tags = @article.tags.pluck(:name).map { |name| { "name" => name } }.to_json
     @existing_category = @article.category&.name
   end
@@ -75,6 +74,22 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to articles_path, status: :see_other, notice: t(".success") }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /articles/1/revert
+  def revert
+    if @article.paper_trail.previous_version
+      @article = @article.paper_trail.previous_version
+      @existing_tags = @article.tags.pluck(:name).map { |name| { "name" => name } }.to_json
+      @existing_category = @article.category&.name
+      flash.now[:notice] = "Showing previous version"
+      respond_to do |format|
+        format.html { render :edit }
+        format.turbo_stream
+      end
+    else
+      redirect_to edit_article_path(@article), alert: "No previous version available."
     end
   end
 
