@@ -1,6 +1,9 @@
 <article class="bg-white p-4 shadow rounded-lg">
 
-    <%= render 'page_header_links', current_page: 'edit' %>
+<%= render "shared/resource_header_links", 
+          resource_name: "page", 
+          resource: @page, 
+          current_page: 'edit' %>
 
   <div class="w-full">
     <% content_for :title, "Editing: #{@page.title}" %>

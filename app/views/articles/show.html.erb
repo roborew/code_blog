@@ -1,6 +1,9 @@
 <article class="bg-white p-4 shadow rounded-lg">
     <!-- Action buttons -->
-<%= render 'article_header_links', current_page: 'show' %>
+<%= render "shared/resource_header_links", 
+          resource_name: "article", 
+          resource: @article, 
+          current_page: 'show' %>
 
     <!-- Cover image -->
   <% if @article.cover_image.present? %>

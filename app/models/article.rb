@@ -1,6 +1,6 @@
 class Article < ApplicationRecord
   extend FriendlyId
-  friendly_id :title, use: [:slugged, :history]
+  friendly_id :title, use: [ :slugged, :history ]
 
   STATUSES = %w[draft published archived scheduled].freeze
 
@@ -25,9 +25,7 @@ class Article < ApplicationRecord
     title_changed?
   end
 
-  has_paper_trail versions: {
-    scope: -> { order(created_at: :desc) }
-  }
+  has_paper_trail
 
   private
 
