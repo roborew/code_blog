@@ -288,4 +288,96 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     @article.reload
     assert_equal "archived", @article.status
   end
+
+  test "should filter articles by category" do
+    category = Category.create!(name: "TestCategory", user: @user)
+    article = Article.create!(title: "Test", content: "Content", user: @user, category: category)
+
+    get articles_url, params: { category: category.id }
+    assert_response :success
+    assert_includes assigns(:articles), article
+  end
+
+  test "should handle redirect for friendly id" do
+    # Create and save the article first to ensure it has a slug
+    article = Article.create!(
+      title: "Original Title",
+      content: "Test content",
+      user: @user,
+      status: "draft"
+    )
+    old_slug = article.slug
+
+    # Update the title which will generate a new slug
+    article.update!(title: "New Title")
+
+    # Try to access using the old slug
+    get article_url(old_slug)
+    assert_redirected_to article_url(article)
+    assert_response :moved_permanently
+  end
+
+  test "should revert to previous version" do
+    @article.update!(title: "Updated Title")
+    original_title = @article.paper_trail.previous_version.title
+
+    post revert_article_url(@article)
+    assert_response :success
+    assert_equal original_title, assigns(:article).title
+    assert_template :edit
+  end
+
+  test "should handle revert when no previous version exists" do
+    # Ensure there's no previous version
+    @article.versions.destroy_all
+
+    post revert_article_url(@article)
+    assert_redirected_to edit_article_url(@article)
+    assert_equal "No previous version available.", flash[:alert]
+  end
+
+  test "should handle turbo stream response for revert" do
+    @article.update!(title: "Updated Title")
+
+    post revert_article_url(@article), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    assert_response :success
+    assert_match /turbo-stream/, @response.body
+  end
+
+  test "should set existing category in edit" do
+    category = Category.create!(name: "TestCategory", user: @user)
+    @article.update!(category: category)
+
+    get edit_article_url(@article)
+    assert_response :success
+    assert_equal category.name, assigns(:existing_category)
+  end
+
+  test "should handle json format in create" do
+    assert_difference("Article.count") do
+      post articles_url(format: :json), params: {
+        article: {
+          title: "Test JSON",
+          content: "Content",
+          status: "draft"
+        }
+      }
+    end
+    assert_response :created
+  end
+
+  test "should handle json format in update" do
+    patch article_url(@article, format: :json), params: {
+      article: {
+        title: "Updated via JSON",
+        content: @article.content
+      }
+    }
+    assert_response :ok
+  end
+
+  test "should handle json format in destroy" do
+    delete article_url(@article, format: :json)
+    assert_response :no_content
+  end
 end

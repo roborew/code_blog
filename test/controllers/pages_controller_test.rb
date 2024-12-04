@@ -17,7 +17,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create page" do
-    assert_difference('Page.count') do
+    assert_difference("Page.count") do
       post pages_url, params: { page: { title: "New Page", content: "New content" } }
     end
 
@@ -40,10 +40,61 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy page" do
-    assert_difference('Page.count', -1) do
+    assert_difference("Page.count", -1) do
       delete page_url(@page)
     end
 
     assert_redirected_to pages_url
+  end
+
+  test "should not create page with invalid params" do
+    assert_no_difference('Page.count') do
+      post pages_url, params: { page: { title: "", content: "" } }
+    end
+
+    assert_response :unprocessable_entity
+    assert_template :new
+  end
+
+  test "should not update page with invalid params" do
+    patch page_url(@page), params: { page: { title: "", content: "" } }
+    
+    assert_response :unprocessable_entity
+    assert_template :edit
+  end
+
+  # Add JSON format tests for completeness
+  test "should handle json format in create" do
+    assert_difference('Page.count') do
+      post pages_url(format: :json), params: { 
+        page: { title: "JSON Page", content: "JSON content" } 
+      }
+    end
+    assert_response :created
+    assert_equal "application/json", @response.media_type
+  end
+
+  test "should handle json format in failed create" do
+    post pages_url(format: :json), params: { 
+      page: { title: "", content: "" } 
+    }
+    assert_response :unprocessable_entity
+    assert_equal "application/json", @response.media_type
+  end
+
+  test "should handle json format in update" do
+    patch page_url(@page, format: :json), params: { 
+      page: { title: "Updated via JSON", content: "Updated content" } 
+    }
+    assert_response :ok
+    assert_equal "application/json", @response.media_type
+  end
+
+  test "should handle json format in failed update" do
+    patch page_url(@page, format: :json), params: { 
+      page: { title: "", content: "" } 
+    }
+    assert_response :unprocessable_entity
+    assert_equal "application/json", @response.media_type
   end
 end

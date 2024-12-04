@@ -10,17 +10,17 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get categories_index_url
+    get categories_path
     assert_response :success
   end
 
   test "should get edit" do
-    get categories_edit_url
+    get edit_category_path(@category1)
     assert_response :success
   end
 
   test "should return matching categories for the current user" do
-    get categories_search_path, params: { q: "Tech" }
+    get search_categories_path, params: { q: "Tech" }
     assert_response :success
 
     categories = JSON.parse(response.body)
@@ -30,7 +30,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should limit results to 10 categories" do
     11.times { |i| Category.create(name: "Category#{i}", user: @user) }
-    get categories_search_path, params: { q: "Category" }
+    get search_categories_path, params: { q: "Category" }
     assert_response :success
 
     categories = JSON.parse(response.body)
