@@ -24,10 +24,12 @@ class ApplicationHelperTest < ActionView::TestCase
 
     result = markdown(input)
 
-    assert_match /\[RUBY\]/, result
-    assert_match /def hello/, result
-    assert_match /data-controller='code-copy'/, result
-    assert_match /line-numbers/, result
+    assert_includes result, "[RUBY]"
+    assert_includes result, 'data-controller="code-copy"'
+    assert_includes result, "line-numbers"
+
+    expected_code = Base64.strict_encode64("def hello\n  puts \"world\"\nend\n")
+    assert_includes result, "data-code=\"#{expected_code}\""
   end
 
   test "markdown renders code blocks without language" do

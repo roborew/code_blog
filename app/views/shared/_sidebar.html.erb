@@ -11,7 +11,28 @@
   </ul>
 <% end %>
 
-<% if params[:category].present? %>
+<% if @sidebar_tags.present? %>
+  <h2 class="font-bold mb-2 mt-6">Popular Tags</h2>
+  <div class="flex flex-wrap gap-2 mb-6">
+    <% @sidebar_tags.each do |tag| %>
+      <% 
+        # Define both size and color based on article count
+        style_class = case tag.articles_count
+          when 0..2 then "text-sm text-gray-400"
+          when 3..5 then "text-base text-gray-500"
+          when 6..8 then "text-lg text-gray-600"
+          else "text-xl text-gray-700"
+        end 
+      %>
+      <%= link_to articles_path(tag: tag.id), 
+          class: "#{style_class} hover:text-blue-500 transition-colors duration-200" do %>
+        <%= tag.name %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<% if params[:category].present? || params[:tag].present? %>
   <div class="text-left mt-4">
     <%= link_to "Clear Filters", articles_path, class: "text-blue-500 hover:text-blue-700" %>
   </div>

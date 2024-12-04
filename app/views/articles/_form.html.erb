@@ -16,6 +16,8 @@
       <%= form.text_field :title, class: "w-full" %>
     </div>
 
+    <%= render partial: 'shared/milkdown_editor', locals: { form: form, field_name: :content } %>
+
     <div class="mb-4">
       <%= form.label :subheading, class: "block text-gray-700 text-sm font-bold mb-2" %>
       <%= form.text_field :subheading, class: "w-full" %>
@@ -55,7 +57,7 @@
     </div>
 
 
-  <%= render partial: 'shared/milkdown_editor', locals: { form: form, field_name: :content } %>
+
 
     <div class="mb-4">
       <%= form.label :status, class: "block text-gray-700 text-sm font-bold mb-2" %>

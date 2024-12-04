@@ -9,6 +9,8 @@ class ArticlesController < ApplicationController
   def index
     articles = if params[:category]
                  Article.where(category_id: params[:category])
+    elsif params[:tag]
+                 Article.joins(:taggings).where(taggings: { tag_id: params[:tag] })
     else
                  Article.all
     end
@@ -150,5 +152,12 @@ class ArticlesController < ApplicationController
                                   .select("categories.*, COUNT(articles.id) as articles_count")
                                   .group("categories.id")
                                   .order("articles_count DESC, categories.name ASC")
+
+      @sidebar_tags = Tag.joins(:taggings)
+                        .joins("INNER JOIN articles ON taggings.article_id = articles.id")
+                        .where(articles: { user_id: current_user.id })
+                        .select("tags.*, COUNT(DISTINCT articles.id) as articles_count")
+                        .group("tags.id")
+                        .order("tags.name ASC")
     end
 end
