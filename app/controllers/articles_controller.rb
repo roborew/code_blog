@@ -148,14 +148,12 @@ class ArticlesController < ApplicationController
 
     def set_sidebar_data
       @sidebar_categories = Category.left_joins(:articles)
-                                  .where(user: current_user)
                                   .select("categories.*, COUNT(articles.id) as articles_count")
                                   .group("categories.id")
                                   .order("articles_count DESC, categories.name ASC")
 
       @sidebar_tags = Tag.joins(:taggings)
                         .joins("INNER JOIN articles ON taggings.article_id = articles.id")
-                        .where(articles: { user_id: current_user.id })
                         .select("tags.*, COUNT(DISTINCT articles.id) as articles_count")
                         .group("tags.id")
                         .order("tags.name ASC")

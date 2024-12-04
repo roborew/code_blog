@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   include InlineImageProcessor
 
+  before_action :authenticate_user!, except: [:show]
   before_action :set_page, only: %i[show edit update destroy]
 
   def index
@@ -16,6 +17,7 @@ class PagesController < ApplicationController
 
   def edit
   end
+
   def create
     @page = Page.new(page_params)
 

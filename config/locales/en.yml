@@ -28,7 +28,7 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  site_title: "Code Blog"
   articles:
     create:
       success: "Article was successfully created."

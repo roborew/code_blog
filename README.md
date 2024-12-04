@@ -1,24 +1,11 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Basic Coding Blog:
 
-Things you may want to cover:
+- Articles and Pages are rendered with markdown.
+- Uses the [milkdown editor](https://milkdown.dev/).
+- Articles can be categorised and tagged.
+- Pages are created as menu items.
+- Articles are listed on the homepage and filtered by category and tag.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+This is a work in progress and a precursor to developing BlocShed.com which supports the scheduling of Blog posts to multiple platforms.
