@@ -12,6 +12,13 @@ export default {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
+      maxWidth: {
+        ...defaultTheme.maxWidth,
+        "7xl": "80rem", // 1280px
+        "8xl": "90rem", // 1440px
+        "9xl": "96rem", // 1536px
+        full: "100%",
+      },
     },
   },
   plugins: [

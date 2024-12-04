@@ -2,10 +2,11 @@ Rails.application.routes.draw do
   devise_for :users
   resources :articles
   get "tags/search", to: "tags#search"
-  get "categories/index"
-  get "categories/new"
-  get "categories/edit"
-  get "categories/search", to: "categories#search"
+  resources :categories, only: [ :index, :show ] do
+    collection do
+      get "search"
+    end
+  end
 
   resources :pages
   resources :articles do

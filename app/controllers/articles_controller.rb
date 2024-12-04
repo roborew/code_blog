@@ -3,10 +3,16 @@ class ArticlesController < ApplicationController
   before_action :set_paper_trail_whodunnit
   before_action :authenticate_user!, except: [ :index, :show ]
   before_action :set_article, only: [ :show, :edit, :update, :destroy, :revert ]
+  before_action :set_sidebar_data, only: [ :index ]
 
   # GET /articles or /articles.json
   def index
-    @pagy, @articles = pagy(Article.all)
+    articles = if params[:category]
+                 Article.where(category_id: params[:category])
+    else
+                 Article.all
+    end
+    @pagy, @articles = pagy(articles)
   end
 
   # GET /articles/1 or /articles/1.json
@@ -136,5 +142,13 @@ class ArticlesController < ApplicationController
         tag_objects = JSON.parse(params[:tags])
         @existing_tags = tag_objects.map { |t| { "name" => t["value"] } }.to_json
       end
+    end
+
+    def set_sidebar_data
+      @sidebar_categories = Category.left_joins(:articles)
+                                  .where(user: current_user)
+                                  .select("categories.*, COUNT(articles.id) as articles_count")
+                                  .group("categories.id")
+                                  .order("articles_count DESC, categories.name ASC")
     end
 end

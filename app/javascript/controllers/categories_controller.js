@@ -26,14 +26,7 @@ export default class extends Controller {
           skipInvalid: false,
           maxTags: 1,
           mode: "select",
-          blacklist: [
-            "Porn",
-            "Sex",
-            "Nudity",
-            "Violence",
-            "Hate Speech",
-            "Dangerous Content",
-          ],
+          blacklist: ["Porn", "Sex", "Nudity", "Violence", "Dangerous Content"],
           dropdown: {
             enabled: 0,
             maxItems: 10,

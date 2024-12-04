@@ -10,6 +10,10 @@ class CategoriesController < ApplicationController
   end
 
   def index
+    @categories = Category.left_joins(:articles)
+                         .select("categories.*, COUNT(articles.id) as articles_count")
+                         .group("categories.id")
+                         .order("articles_count DESC, categories.name ASC")
   end
 
   def show

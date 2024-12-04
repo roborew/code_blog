@@ -33,13 +33,15 @@
         <button class="lg:hidden w-full mb-4 p-2 bg-white rounded-lg shadow text-left" onclick="document.getElementById('sidebar').classList.toggle('hidden')">
           Toggle Sidebar
         </button>
-        <div class="max-w-full mx-auto flex flex-col lg:flex-row gap-8 justify-center">
+        <div class="max-w-8xl mx-auto flex flex-col lg:flex-row gap-8 justify-center">
           <!-- Sidebar -->
-          <aside id="sidebar" class="hidden lg:block lg:w-64 bg-white p-4 shadow rounded-lg shrink-0">
-            <%= render "shared/sidebar" %>
-          </aside>
+          <% if controller_name == 'articles' && action_name == 'index' %>
+            <aside id="sidebar" class="hidden lg:block lg:w-64 bg-white p-4 shadow rounded-lg shrink-0">
+              <%= render "shared/sidebar" %>
+            </aside>
+          <% end %>
           <!-- Main content -->
-          <section class="flex-grow max-w-7xl rounded-lg space-y-6">
+          <section class="flex-grow rounded-lg space-y-6">
             <%= render "shared/flash_notices" %>
             <%= yield %>
           </section>

@@ -1,2 +1,20 @@
-<h1>Categories#index</h1>
-<p>Find me in app/views/categories/index.html.erb</p>
+<div class="max-w-4xl mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6">Categories</h1>
+
+  <div class="bg-white shadow rounded-lg">
+    <div class="divide-y divide-gray-200">
+      <% @categories.each do |category| %>
+        <div class="p-4 flex items-center justify-between hover:bg-gray-50">
+          <div>
+            <%= link_to category_path(category), class: "text-lg text-gray-900 hover:text-blue-600" do %>
+              <%= category.name %>
+            <% end %>
+          </div>
+          <div class="text-gray-500">
+            <%= pluralize(category.articles_count, 'article') %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
