@@ -15,7 +15,6 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
-
     <style>
       .turbo-progress-bar {
         background: linear-gradient(to right, #4F46E5, #818CF8);
@@ -45,7 +44,7 @@
             <%= yield %>
           </section>
         </div>
-        <%= console if Rails.env.development? %>
+        <%#= console if Rails.env.development? %>
       </div>
       <div class="hidden items-center justify-center py-12" data-turbo-target="loading">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>

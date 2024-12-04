@@ -1,3 +1,5 @@
 <% @articles.each do |article| %>
     <%= render article %>
 <% end %>
+
+<%== pagy_nav(@pagy) if @pagy %>

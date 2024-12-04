@@ -69,5 +69,5 @@ gem "devise", "~> 4.9"
 gem "redcarpet"
 gem "coderay"
 gem "friendly_id"
-
+gem "pagy"
 gem "paper_trail", "~> 16.0"
