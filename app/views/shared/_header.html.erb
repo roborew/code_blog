@@ -1,0 +1,17 @@
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">Robins Blog</h1>
+        <nav>
+            <ul class="flex space-x-4">
+                <li><%= link_to "Home", root_path %></li>
+                <%= render "shared/nav_pages" %>
+                <% if user_signed_in? %>
+                    <li><%= link_to "Profile", edit_user_registration_path %></li>
+                    <li><%= link_to "Create New Article", new_article_path %></li>
+                    <li><%= button_to "Log Out", destroy_user_session_path, method: :delete %></li>
+                <% else %>
+                    <li><%= link_to "Log In", new_user_session_path %></li>
+                    <li><%= link_to "Sign Up", new_user_registration_path %></li>
+                <% end %>
+            </ul>
+        </nav>
+    </div>

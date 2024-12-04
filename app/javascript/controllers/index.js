@@ -15,3 +15,6 @@ application.register("milkdown", MilkdownController);
 
 import CodeCopyController from "./code_copy_controller.js";
 application.register("code-copy", CodeCopyController);
+
+import TurboController from "./turbo_controller.js";
+application.register("turbo", TurboController);

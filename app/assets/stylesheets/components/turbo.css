@@ -1,0 +1,7 @@
+.loading [data-turbo-target="temporary"] {
+    @apply opacity-0;
+  }
+  
+  .loading [data-turbo-target="loading"] {
+    @apply flex opacity-100;
+  }

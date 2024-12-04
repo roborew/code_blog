@@ -2,6 +2,7 @@
 @import "./components/milkdown.css";
 @import "./components/tagify.css";
 @import "./components/markdown.css";
+@import "./components/turbo.css";
 
 @tailwind base;
 @tailwind components;
