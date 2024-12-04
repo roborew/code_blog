@@ -4,11 +4,10 @@ export default class extends Controller {
   static targets = ["button"];
   async copy(event) {
     const button = event.currentTarget;
-    const code = decodeURIComponent(button.dataset.code);
+    const code = atob(button.dataset.code);
 
     try {
       await navigator.clipboard.writeText(code);
-
       // Visual feedback
       const originalText = button.textContent;
       button.textContent = "Copied!";

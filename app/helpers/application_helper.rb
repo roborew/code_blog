@@ -35,7 +35,7 @@ module ApplicationHelper
                        transition-colors duration-150 ease-in-out'
                   data-action='click->code-copy#copy'
                   data-code-copy-target='button'
-                  data-code='#{CGI.escape_html(code)}'>
+                  data-code='#{Base64.strict_encode64(code)}'>
             Copy
           </button>
         </div>

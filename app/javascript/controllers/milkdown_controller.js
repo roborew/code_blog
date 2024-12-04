@@ -15,9 +15,25 @@ export default class extends Controller {
     const form = this.element.closest("form");
 
     if (form) {
-      // Prevent form from submitting when clicking on the editor.
-      this.editorTarget.addEventListener("mouseup", (e) => e.preventDefault());
-      // this.editorTarget.addEventListener("click", (e) => e.preventDefault());
+      this.editorTarget.addEventListener("mouseup", (e) => {
+        if (
+          !e.target.closest(".image-edit") &&
+          !e.target.matches('input[type="file"]') &&
+          !e.target.matches(".uploader")
+        ) {
+          e.preventDefault();
+        }
+      });
+
+      this.editorTarget.addEventListener("click", (e) => {
+        if (
+          !e.target.closest(".image-edit") &&
+          !e.target.matches('input[type="file"]') &&
+          !e.target.matches(".uploader")
+        ) {
+          e.preventDefault();
+        }
+      });
     }
     // Initialize the editor.
     this.contentEditor = new Crepe({
